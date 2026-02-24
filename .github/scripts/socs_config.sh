@@ -60,6 +60,30 @@ IDF_V5_5_TARGETS=("esp32s3")
 IDF_COMPONENT_TARGETS=("${IDF_V5_5_TARGETS[@]}")
 
 # ==============================================================================
+# IDF Specific Configuration
+# ==============================================================================
+
+# Get IDF targets for a specific version
+# Usage: get_targets_for_idf_version "release-v5.5"
+get_targets_for_idf_version() {
+    local version="$1"
+    case "$version" in
+        release-v5.3)
+            array_to_csv "${IDF_V5_3_TARGETS[@]}"
+            ;;
+        release-v5.4)
+            array_to_csv "${IDF_V5_4_TARGETS[@]}"
+            ;;
+        release-v5.5)
+            array_to_csv "${IDF_V5_5_TARGETS[@]}"
+            ;;
+        *)
+            echo ""
+            ;;
+    esac
+}
+
+# ==============================================================================
 # Helper Functions for Array to String Conversion
 # ==============================================================================
 
