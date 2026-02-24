@@ -13,24 +13,18 @@ source "$SCRIPTS_DIR/lib-github-release.sh"
 OUTPUT_DIR="$GITHUB_WORKSPACE/build"
 PACKAGE_JSON_DEV="package_esp32_dev_index.json"
 PACKAGE_JSON_REL="package_esp32_index.json"
-PACKAGE_JSON_DEV_CN="package_esp32_dev_index_cn.json"
-PACKAGE_JSON_REL_CN="package_esp32_index_cn.json"
 
 echo "Uploading package JSONs ..."
 
 echo "Uploading $PACKAGE_JSON_DEV ..."
 echo "Download URL: $(git_safe_upload_asset "$OUTPUT_DIR/$PACKAGE_JSON_DEV" "$RELEASE_ID")"
 echo "Pages URL: $(git_safe_upload_to_pages "$PACKAGE_JSON_DEV" "$OUTPUT_DIR/$PACKAGE_JSON_DEV")"
-echo "Download CN URL: $(git_safe_upload_asset "$OUTPUT_DIR/$PACKAGE_JSON_DEV_CN" "$RELEASE_ID")"
-echo "Pages CN URL: $(git_safe_upload_to_pages "$PACKAGE_JSON_DEV_CN" "$OUTPUT_DIR/$PACKAGE_JSON_DEV_CN")"
 echo
 
 if [ "$RELEASE_PRE" == "false" ]; then
     echo "Uploading $PACKAGE_JSON_REL ..."
     echo "Download URL: $(git_safe_upload_asset "$OUTPUT_DIR/$PACKAGE_JSON_REL" "$RELEASE_ID")"
     echo "Pages URL: $(git_safe_upload_to_pages "$PACKAGE_JSON_REL" "$OUTPUT_DIR/$PACKAGE_JSON_REL")"
-    echo "Download CN URL: $(git_safe_upload_asset "$OUTPUT_DIR/$PACKAGE_JSON_REL_CN" "$RELEASE_ID")"
-    echo "Pages CN URL: $(git_safe_upload_to_pages "$PACKAGE_JSON_REL_CN" "$OUTPUT_DIR/$PACKAGE_JSON_REL_CN")"
     echo
 fi
 

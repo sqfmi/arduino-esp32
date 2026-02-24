@@ -62,7 +62,7 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "Compiling example ..."
-arduino-cli compile --fqbn esp32:esp32:esp32 "$GITHUB_WORKSPACE"/libraries/ESP32/examples/CI/CIBoardsTest/CIBoardsTest.ino
+arduino-cli compile --fqbn esp32:esp32:esp32s3 "$GITHUB_WORKSPACE"/libraries/ESP32/examples/CI/CIBoardsTest/CIBoardsTest.ino
 if [ $? -ne 0 ]; then
     echo "ERROR: Failed to compile example ($?)"
     exit 1
@@ -93,7 +93,7 @@ if [ "$RELEASE_PRE" == "false" ]; then
     fi
 
     echo "Compiling example ..."
-    arduino-cli compile --fqbn esp32:esp32:esp32 "$GITHUB_WORKSPACE"/libraries/ESP32/examples/CI/CIBoardsTest/CIBoardsTest.ino
+    arduino-cli compile --fqbn esp32:esp32:esp32s3 "$GITHUB_WORKSPACE"/libraries/ESP32/examples/CI/CIBoardsTest/CIBoardsTest.ino
     if [ $? -ne 0 ]; then
         echo "ERROR: Failed to compile example ($?)"
         exit 1

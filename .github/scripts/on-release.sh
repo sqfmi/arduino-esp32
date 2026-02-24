@@ -35,8 +35,6 @@ PACKAGE_JSON_MERGE="$GITHUB_WORKSPACE/.github/scripts/merge_packages.py"
 PACKAGE_JSON_TEMPLATE="$GITHUB_WORKSPACE/package/package_esp32_index.template.json"
 PACKAGE_JSON_DEV="package_esp32_dev_index.json"
 PACKAGE_JSON_REL="package_esp32_index.json"
-PACKAGE_JSON_DEV_CN="package_esp32_dev_index_cn.json"
-PACKAGE_JSON_REL_CN="package_esp32_index_cn.json"
 
 # Source SoC configuration
 source "$SCRIPTS_DIR/socs_config.sh"
@@ -59,35 +57,6 @@ fi
 if [ -n "${VENDOR}" ]; then
     echo "Setting packager: $VENDOR"
 fi
-
-#
-# Replace a literal string while skipping the first N occurrences (file-wide).
-# Portable across macOS/Linux (avoids sed "skip first match" differences).
-#
-# skip_n semantics:
-#   - skip_n=0 : replace all occurrences (skip none)
-#   - skip_n=1 : skip the first occurrence, replace all subsequent ones
-#   - skip_n=N : skip the first N occurrences, then replace the rest
-#
-# Usage:
-#   replace_literal_skip_n <skip_n> <from_literal> <to_literal> <infile> <outfile>
-#
-function replace_literal_skip_n {
-    local skip_n="$1"
-    local from_literal="$2"
-    local to_literal="$3"
-    local infile="$4"
-    local outfile="$5"
-
-    if [ -z "$infile" ] || [ -z "$outfile" ]; then
-        >&2 echo "ERROR: replace_literal_skip_n: missing infile/outfile"
-        return 1
-    fi
-
-    SKIP="$skip_n" FROM="$from_literal" TO="$to_literal" \
-        perl -pe 'BEGIN{$s=$ENV{SKIP}+0;$from=$ENV{FROM};$to=$ENV{TO};$i=0;} s/\Q$from\E/($i++<$s)?$&:$to/ge' \
-        "$infile" > "$outfile"
-}
 
 function merge_package_json {
     local jsonLink=$1
@@ -131,9 +100,6 @@ set -e
 mkdir -p "$OUTPUT_DIR"
 PKG_DIR="${OUTPUT_DIR:?}/$PACKAGE_NAME"
 PACKAGE_ZIP="$PACKAGE_NAME.zip"
-PACKAGE_XZ="$PACKAGE_NAME.tar.xz"
-LIBS_ZIP="$PACKAGE_NAME-libs.zip"
-LIBS_XZ="$PACKAGE_NAME-libs.tar.xz"
 
 echo "Updating version..."
 if ! "${SCRIPTS_DIR}/update-version.sh" "$RELEASE_TAG"; then
@@ -202,8 +168,6 @@ find "$PKG_DIR" -name '*.git*' -type f -delete
 ##
 ## TEMP WORKAROUND FOR RV32 LONG PATH ON WINDOWS
 ##
-RVTC_NAME="riscv32-esp-elf-gcc"
-RVTC_NEW_NAME="esp-rv32"
 X32TC_NAME="xtensa-esp-elf-gcc"
 X32TC_NEW_NAME="esp-x32"
 
@@ -218,7 +182,7 @@ sed '/compiler\.sdk\.path\.windows={tools\.esp32-arduino-libs\.path}/d' | \
 sed 's/{runtime\.platform\.path}.tools.xtensa-esp-elf-gdb/\{runtime.tools.xtensa-esp-elf-gdb.path\}/g' | \
 sed "s/{runtime\.platform\.path}.tools.xtensa-esp-elf/\\{runtime.tools.$X32TC_NEW_NAME.path\\}/g" | \
 sed 's/{runtime\.platform\.path}.tools.riscv32-esp-elf-gdb/\{runtime.tools.riscv32-esp-elf-gdb.path\}/g' | \
-sed "s/{runtime\.platform\.path}.tools.riscv32-esp-elf/\\{runtime.tools.$RVTC_NEW_NAME.path\\}/g" | \
+sed 's/{runtime\.platform\.path}.tools.riscv32-esp-elf/\{runtime.tools.riscv32-esp-elf.path\}/g' | \
 sed 's/{runtime\.platform\.path}.tools.esptool/\{runtime.tools.esptool_py.path\}/g' | \
 sed 's/{runtime\.platform\.path}.tools.openocd-esp32/\{runtime.tools.openocd-esp32.path\}/g' > "$PKG_DIR/platform.txt"
 
@@ -254,24 +218,6 @@ popd >/dev/null
 echo "'$PACKAGE_ZIP' Created! Size: $PACKAGE_SIZE, SHA-256: $PACKAGE_SHA"
 echo
 
-# Compress XZ package folder
-echo "Creating XZ ..."
-pushd "$OUTPUT_DIR" >/dev/null
-tar -cJf "$PACKAGE_XZ" "$PACKAGE_NAME"
-if [ $? -ne 0 ]; then
-    echo "ERROR: Failed to create $PACKAGE_XZ ($?)"
-    exit 1
-fi
-
-# Calculate SHA-256
-echo "Calculating XZ SHA sum ..."
-PACKAGE_XZ_PATH="${OUTPUT_DIR:?}/$PACKAGE_XZ"
-PACKAGE_XZ_SHA=$(shasum -a 256 "$PACKAGE_XZ" | cut -f 1 -d ' ')
-PACKAGE_XZ_SIZE=$(get_file_size "$PACKAGE_XZ")
-popd >/dev/null
-echo "'$PACKAGE_XZ' Created! Size: $PACKAGE_XZ_SIZE, SHA-256: $PACKAGE_XZ_SHA"
-echo
-
 # Upload ZIP package to release page
 echo "Uploading ZIP package to release page ..."
 PACKAGE_URL=$(git_safe_upload_asset "$PACKAGE_PATH" "$RELEASE_ID")
@@ -279,21 +225,15 @@ echo "Package Uploaded"
 echo "Download URL: $PACKAGE_URL"
 echo
 
-# Upload XZ package to release page
-echo "Uploading XZ package to release page ..."
-PACKAGE_XZ_URL=$(git_safe_upload_asset "$PACKAGE_XZ_PATH" "$RELEASE_ID")
-echo "Package Uploaded"
-echo "Download URL: $PACKAGE_XZ_URL"
-echo
-
 # Remove package folder
 rm -rf "$PKG_DIR"
 
-# Copy Libs from lib-builder to release in ZIP and XZ
+# Copy Libs from lib-builder to release in ZIP
 
 libs_url=$(cat "$PACKAGE_JSON_TEMPLATE" | jq -r ".packages[0].tools[] | select(.name == \"esp32-arduino-libs\") | .systems[0].url")
 libs_sha=$(cat "$PACKAGE_JSON_TEMPLATE" | jq -r ".packages[0].tools[] | select(.name == \"esp32-arduino-libs\") | .systems[0].checksum" | sed 's/^SHA-256://')
 libs_size=$(cat "$PACKAGE_JSON_TEMPLATE" | jq -r ".packages[0].tools[] | select(.name == \"esp32-arduino-libs\") | .systems[0].size")
+LIBS_ZIP="$PACKAGE_NAME-libs.zip"
 echo "Downloading libs from lib-builder ..."
 echo "URL: $libs_url"
 echo "Expected SHA: $libs_sha"
@@ -314,17 +254,8 @@ if [ "$zip_sha" != "$libs_sha" ] || [ "$zip_size" != "$libs_size" ]; then
 fi
 
 # Extract ZIP
-
-echo "Repacking libs to XZ ..."
+echo "Extracting libs ..."
 unzip -q "$OUTPUT_DIR/$LIBS_ZIP" -d "$OUTPUT_DIR"
-pushd "$OUTPUT_DIR" >/dev/null
-tar -cJf "$LIBS_XZ" "esp32-arduino-libs"
-popd >/dev/null
-
-# Copy esp-hosted binaries
-
-mkdir -p "$GITHUB_WORKSPACE/hosted"
-cp "$OUTPUT_DIR/esp32-arduino-libs/hosted"/*.bin "$GITHUB_WORKSPACE/hosted/"
 
 # Create per-SoC ZIPs
 echo "Creating per-SoC libs ZIPs..."
@@ -372,29 +303,11 @@ for soc_variant in "${CORE_VARIANTS[@]}"; do
     # Clean up temp directory
     rm -rf "$temp_dir"
 
-    # Upload ZIP (S3 if configured, otherwise GitHub)
-    if [ "$ENABLE_S3" == "true" ] && [ -n "$S3_BUCKET_NAME" ] && [ -n "$S3_BUCKET_REGION" ]; then
-        echo "Uploading $soc_zip to S3..."
-        s3_key="$soc_zip"
-        aws s3 cp "$OUTPUT_DIR/$soc_zip" "s3://$S3_BUCKET_NAME/arduino/$RELEASE_TAG/$s3_key" --acl public-read --cache-control "public, max-age=31536000, immutable" --content-type application/zip
-        soc_zip_url="https://$S3_BUCKET_NAME.s3.$S3_BUCKET_REGION.amazonaws.com/arduino/$RELEASE_TAG/$s3_key"
-        echo "$soc_zip Uploaded to S3"
-        echo "S3 URL: $soc_zip_url"
-
-        # Upload "latest" version to S3
-        latest_zip="${soc_variant}-libs-latest.zip"
-        cp "$OUTPUT_DIR/$soc_zip" "$OUTPUT_DIR/$latest_zip"
-        echo "Uploading $latest_zip (latest) to S3..."
-        aws s3 cp "$OUTPUT_DIR/$latest_zip" "s3://$S3_BUCKET_NAME/arduino/latest/$latest_zip" --acl public-read --cache-control "no-cache, must-revalidate" --content-type application/zip
-        latest_zip_url="https://$S3_BUCKET_NAME.s3.$S3_BUCKET_REGION.amazonaws.com/arduino/latest/$latest_zip"
-        echo "$latest_zip Uploaded to S3"
-        echo "S3 URL: $latest_zip_url"
-    else
-        echo "Uploading $soc_zip to GitHub releases..."
-        soc_zip_url=$(git_safe_upload_asset "$OUTPUT_DIR/$soc_zip" "$RELEASE_ID")
-        echo "$soc_zip Uploaded to GitHub"
-        echo "GitHub URL: $soc_zip_url"
-    fi
+    # Upload ZIP to GitHub releases
+    echo "Uploading $soc_zip to GitHub releases..."
+    soc_zip_url=$(git_safe_upload_asset "$OUTPUT_DIR/$soc_zip" "$RELEASE_ID")
+    echo "$soc_zip Uploaded to GitHub"
+    echo "GitHub URL: $soc_zip_url"
 
     # Store URLs, filenames, checksums and sizes for JSON update
     SOC_ZIP_URLS["$soc_variant"]="$soc_zip_url"
@@ -404,18 +317,9 @@ for soc_variant in "${CORE_VARIANTS[@]}"; do
 
     # Clean up ZIP files
     rm -f "$soc_zip"
-    if [ "$ENABLE_S3" == "true" ] && [ -n "$S3_BUCKET_NAME" ] && [ -n "$S3_BUCKET_REGION" ]; then
-        rm -f "$latest_zip"
-    fi
 done
 
 popd >/dev/null
-
-echo "Uploading XZ libs to release page ..."
-LIBS_XZ_URL=$(git_safe_upload_asset "$OUTPUT_DIR/$LIBS_XZ" "$RELEASE_ID")
-echo "XZ libs Uploaded"
-echo "Download URL: $LIBS_XZ_URL"
-echo
 
 # Update libs URLs in JSON template
 echo "Updating libs URLs in JSON template ..."
@@ -454,25 +358,19 @@ echo
 # Clean up
 rm -rf "${OUTPUT_DIR:?}/esp32-arduino-libs"
 rm -rf "${OUTPUT_DIR:?}/$LIBS_ZIP"
-rm -rf "${OUTPUT_DIR:?}/$LIBS_XZ"
 
 ##
-## TEMP WORKAROUND FOR RV32 LONG PATH ON WINDOWS
+## TEMP WORKAROUND FOR XTENSA LONG PATH ON WINDOWS
 ##
-RVTC_VERSION=$(cat "$PACKAGE_JSON_TEMPLATE" | jq -r ".packages[0].platforms[0].toolsDependencies[] | select(.name == \"$RVTC_NAME\") | .version" | cut -d '_' -f 2)
-# RVTC_VERSION=`date -j -f '%Y%m%d' "$RVTC_VERSION" '+%y%m'` # MacOS
-RVTC_VERSION=$(date -d "$RVTC_VERSION" '+%y%m')
-rvtc_jq_arg="\
-    (.packages[0].platforms[0].toolsDependencies[] | select(.name==\"$RVTC_NAME\")).version = \"$RVTC_VERSION\" |\
-    (.packages[0].platforms[0].toolsDependencies[] | select(.name==\"$RVTC_NAME\")).name = \"$RVTC_NEW_NAME\" |\
-    (.packages[0].tools[] | select(.name==\"$RVTC_NAME\")).version = \"$RVTC_VERSION\" |\
-    (.packages[0].tools[] | select(.name==\"$RVTC_NAME\")).name = \"$RVTC_NEW_NAME\" |\
-    (.packages[0].platforms[0].toolsDependencies[] | select(.name==\"$X32TC_NAME\")).version = \"$RVTC_VERSION\" |\
+X32TC_VERSION=$(cat "$PACKAGE_JSON_TEMPLATE" | jq -r ".packages[0].platforms[0].toolsDependencies[] | select(.name == \"$X32TC_NAME\") | .version" | cut -d '_' -f 2)
+X32TC_VERSION=$(date -d "$X32TC_VERSION" '+%y%m')
+xtc_jq_arg="\
+    (.packages[0].platforms[0].toolsDependencies[] | select(.name==\"$X32TC_NAME\")).version = \"$X32TC_VERSION\" |\
     (.packages[0].platforms[0].toolsDependencies[] | select(.name==\"$X32TC_NAME\")).name = \"$X32TC_NEW_NAME\" |\
-    (.packages[0].tools[] | select(.name==\"$X32TC_NAME\")).version = \"$RVTC_VERSION\" |\
+    (.packages[0].tools[] | select(.name==\"$X32TC_NAME\")).version = \"$X32TC_VERSION\" |\
     (.packages[0].tools[] | select(.name==\"$X32TC_NAME\")).name = \"$X32TC_NEW_NAME\""
-cat "$PACKAGE_JSON_TEMPLATE" | jq "$rvtc_jq_arg" > "$OUTPUT_DIR/package-rvfix.json"
-PACKAGE_JSON_TEMPLATE="$OUTPUT_DIR/package-rvfix.json"
+cat "$PACKAGE_JSON_TEMPLATE" | jq "$xtc_jq_arg" > "$OUTPUT_DIR/package-xtfix.json"
+PACKAGE_JSON_TEMPLATE="$OUTPUT_DIR/package-xtfix.json"
 
 ##
 ## PACKAGE JSON
@@ -487,24 +385,10 @@ jq_arg=".packages[0].platforms[0].version = \"$RELEASE_TAG\" | \
 
 # Generate package JSONs
 echo "Generating $PACKAGE_JSON_DEV ..."
-tmp_pkg_json="$OUTPUT_DIR/${PACKAGE_JSON_DEV}.raw"
-cat "$PACKAGE_JSON_TEMPLATE" | jq "$jq_arg" > "$tmp_pkg_json"
-# For some reason downloads from dl.espressif.com keep failing. Commenting out for now.
-# replace_literal_skip_n 2 "github.com/" "dl.espressif.com/github_assets/" "$tmp_pkg_json" "$OUTPUT_DIR/$PACKAGE_JSON_DEV"
-cp "$tmp_pkg_json" "$OUTPUT_DIR/$PACKAGE_JSON_DEV" # Can remove this once we have a fix for dl.espressif.com
-replace_literal_skip_n 1 "github.com/" "dl.espressif.cn/github_assets/" "$tmp_pkg_json" "$OUTPUT_DIR/$PACKAGE_JSON_DEV_CN"
-rm -f "$tmp_pkg_json"
-python "$SCRIPTS_DIR/release_append_cn.py" "$OUTPUT_DIR/$PACKAGE_JSON_DEV_CN"
+cat "$PACKAGE_JSON_TEMPLATE" | jq "$jq_arg" > "$OUTPUT_DIR/$PACKAGE_JSON_DEV"
 if [ "$RELEASE_PRE" == "false" ]; then
     echo "Generating $PACKAGE_JSON_REL ..."
-    tmp_pkg_json="$OUTPUT_DIR/${PACKAGE_JSON_REL}.raw"
-    cat "$PACKAGE_JSON_TEMPLATE" | jq "$jq_arg" > "$tmp_pkg_json"
-    # For some reason downloads from dl.espressif.com keep failing. Commenting out for now.
-    # replace_literal_skip_n 2 "github.com/" "dl.espressif.com/github_assets/" "$tmp_pkg_json" "$OUTPUT_DIR/$PACKAGE_JSON_REL"
-    cp "$tmp_pkg_json" "$OUTPUT_DIR/$PACKAGE_JSON_REL" # Can remove this once we have a fix for dl.espressif.com
-    replace_literal_skip_n 1 "github.com/" "dl.espressif.cn/github_assets/" "$tmp_pkg_json" "$OUTPUT_DIR/$PACKAGE_JSON_REL_CN"
-    rm -f "$tmp_pkg_json"
-    python "$SCRIPTS_DIR/release_append_cn.py" "$OUTPUT_DIR/$PACKAGE_JSON_REL_CN"
+    cat "$PACKAGE_JSON_TEMPLATE" | jq "$jq_arg" > "$OUTPUT_DIR/$PACKAGE_JSON_REL"
 fi
 
 # Figure out the last release or pre-release
@@ -536,14 +420,12 @@ echo
 if [ -n "$prev_any_release" ] && [ "$prev_any_release" != "null" ]; then
     echo "Merging with JSON from $prev_any_release ..."
     merge_package_json "$prev_any_release/$PACKAGE_JSON_DEV" "$OUTPUT_DIR/$PACKAGE_JSON_DEV"
-    merge_package_json "$prev_any_release/$PACKAGE_JSON_DEV_CN" "$OUTPUT_DIR/$PACKAGE_JSON_DEV_CN"
 fi
 
 if [ "$RELEASE_PRE" == "false" ]; then
     if [ -n "$prev_release" ] && [ "$prev_release" != "null" ]; then
         echo "Merging with JSON from $prev_release ..."
         merge_package_json "$prev_release/$PACKAGE_JSON_REL" "$OUTPUT_DIR/$PACKAGE_JSON_REL"
-        merge_package_json "$prev_release/$PACKAGE_JSON_REL_CN" "$OUTPUT_DIR/$PACKAGE_JSON_REL_CN"
     fi
 fi
 
@@ -552,8 +434,6 @@ fi
 ##
 echo "Build complete! Package JSONs generated."
 echo "- $PACKAGE_JSON_DEV"
-echo "- $PACKAGE_JSON_DEV_CN"
 if [ "$RELEASE_PRE" == "false" ]; then
     echo "- $PACKAGE_JSON_REL"
-    echo "- $PACKAGE_JSON_REL_CN"
 fi
