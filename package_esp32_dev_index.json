@@ -16,8 +16,8 @@
           "category": "ESP32",
           "url": "https://github.com/sqfmi/arduino-esp32/releases/download/3.3.7/esp32-core-3.3.7.zip",
           "archiveFileName": "esp32-core-3.3.7.zip",
-          "checksum": "SHA-256:2084b42f355af944ad85997bb5b3142d6a9d64f56f0ab3785c8ca09e65c19327",
-          "size": "27556485",
+          "checksum": "SHA-256:4bb58b22bc408697b83252d681acbfb86847c40766d8cd1d2d33755df248aade",
+          "size": "27556477",
           "help": {
             "online": ""
           },
@@ -423,56 +423,56 @@
               "host": "i686-mingw32",
               "url": "https://github.com/sqfmi/arduino-esp32/releases/download/3.3.7/esp32s3-libs-3.3.7.zip",
               "archiveFileName": "esp32s3-libs-3.3.7.zip",
-              "checksum": "SHA-256:fe1e6e84d662c347d2740e5fda20bc56607d4ad5d848f0da75222a429b10d379",
+              "checksum": "SHA-256:7000f47c1d44eb9d307a3893c3bd45eb6c4946941eca84983866dfa815a15820",
               "size": "64758834"
             },
             {
               "host": "x86_64-mingw32",
               "url": "https://github.com/sqfmi/arduino-esp32/releases/download/3.3.7/esp32s3-libs-3.3.7.zip",
               "archiveFileName": "esp32s3-libs-3.3.7.zip",
-              "checksum": "SHA-256:fe1e6e84d662c347d2740e5fda20bc56607d4ad5d848f0da75222a429b10d379",
+              "checksum": "SHA-256:7000f47c1d44eb9d307a3893c3bd45eb6c4946941eca84983866dfa815a15820",
               "size": "64758834"
             },
             {
               "host": "arm64-apple-darwin",
               "url": "https://github.com/sqfmi/arduino-esp32/releases/download/3.3.7/esp32s3-libs-3.3.7.zip",
               "archiveFileName": "esp32s3-libs-3.3.7.zip",
-              "checksum": "SHA-256:fe1e6e84d662c347d2740e5fda20bc56607d4ad5d848f0da75222a429b10d379",
+              "checksum": "SHA-256:7000f47c1d44eb9d307a3893c3bd45eb6c4946941eca84983866dfa815a15820",
               "size": "64758834"
             },
             {
               "host": "x86_64-apple-darwin",
               "url": "https://github.com/sqfmi/arduino-esp32/releases/download/3.3.7/esp32s3-libs-3.3.7.zip",
               "archiveFileName": "esp32s3-libs-3.3.7.zip",
-              "checksum": "SHA-256:fe1e6e84d662c347d2740e5fda20bc56607d4ad5d848f0da75222a429b10d379",
+              "checksum": "SHA-256:7000f47c1d44eb9d307a3893c3bd45eb6c4946941eca84983866dfa815a15820",
               "size": "64758834"
             },
             {
               "host": "x86_64-pc-linux-gnu",
               "url": "https://github.com/sqfmi/arduino-esp32/releases/download/3.3.7/esp32s3-libs-3.3.7.zip",
               "archiveFileName": "esp32s3-libs-3.3.7.zip",
-              "checksum": "SHA-256:fe1e6e84d662c347d2740e5fda20bc56607d4ad5d848f0da75222a429b10d379",
+              "checksum": "SHA-256:7000f47c1d44eb9d307a3893c3bd45eb6c4946941eca84983866dfa815a15820",
               "size": "64758834"
             },
             {
               "host": "i686-pc-linux-gnu",
               "url": "https://github.com/sqfmi/arduino-esp32/releases/download/3.3.7/esp32s3-libs-3.3.7.zip",
               "archiveFileName": "esp32s3-libs-3.3.7.zip",
-              "checksum": "SHA-256:fe1e6e84d662c347d2740e5fda20bc56607d4ad5d848f0da75222a429b10d379",
+              "checksum": "SHA-256:7000f47c1d44eb9d307a3893c3bd45eb6c4946941eca84983866dfa815a15820",
               "size": "64758834"
             },
             {
               "host": "aarch64-linux-gnu",
               "url": "https://github.com/sqfmi/arduino-esp32/releases/download/3.3.7/esp32s3-libs-3.3.7.zip",
               "archiveFileName": "esp32s3-libs-3.3.7.zip",
-              "checksum": "SHA-256:fe1e6e84d662c347d2740e5fda20bc56607d4ad5d848f0da75222a429b10d379",
+              "checksum": "SHA-256:7000f47c1d44eb9d307a3893c3bd45eb6c4946941eca84983866dfa815a15820",
               "size": "64758834"
             },
             {
               "host": "arm-linux-gnueabihf",
               "url": "https://github.com/sqfmi/arduino-esp32/releases/download/3.3.7/esp32s3-libs-3.3.7.zip",
               "archiveFileName": "esp32s3-libs-3.3.7.zip",
-              "checksum": "SHA-256:fe1e6e84d662c347d2740e5fda20bc56607d4ad5d848f0da75222a429b10d379",
+              "checksum": "SHA-256:7000f47c1d44eb9d307a3893c3bd45eb6c4946941eca84983866dfa815a15820",
               "size": "64758834"
             }
           ]
