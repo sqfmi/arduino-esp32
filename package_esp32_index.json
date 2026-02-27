@@ -11,7 +11,7 @@
       "platforms": [
         {
           "name": "Watchy",
-          "architecture": "esp32",
+          "architecture": "watchy-esp32",
           "version": "3.3.7",
           "category": "ESP32",
           "url": "https://github.com/sqfmi/arduino-esp32/releases/download/3.3.7/esp32-core-3.3.7.zip",
