@@ -1,16 +1,16 @@
 {
   "packages": [
     {
-      "name": "esp32",
-      "maintainer": "Espressif Systems",
-      "websiteURL": "https://github.com/espressif/arduino-esp32",
-      "email": "hristo@espressif.com",
+      "name": "sqfmi",
+      "maintainer": "SQFMI",
+      "websiteURL": "https://watchy.sqfmi.com",
+      "email": "woo@sqfmi.com",
       "help": {
-        "online": "https://esp32.com"
+        "online": "https://watchy.sqfmi.com"
       },
       "platforms": [
         {
-          "name": "esp32",
+          "name": "Watchy",
           "architecture": "esp32",
           "version": "",
           "category": "ESP32",
@@ -24,6 +24,9 @@
           "boards": [
             {
               "name": "ESP32-S3 Dev Board"
+            },
+            {
+              "name": "Watchy"
             }
           ],
           "toolsDependencies": [
