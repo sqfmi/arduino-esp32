@@ -308,6 +308,7 @@ function build_sketch { # build_sketch <ide_path> <user_path> <path-to-ino> [ext
                 --warnings "all" \
                 --build-property "compiler.warning_flags.all=-Wall -Werror=all -Wextra" \
                 --build-path "$build_dir" \
+                --hardware "$user_path/hardware" \
                 "${xtra_opts[@]}" "${sketchdir}" \
                 2>&1 | tee "$output_file"
 
