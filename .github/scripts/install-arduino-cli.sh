@@ -49,3 +49,12 @@ if [ ! -d "$ARDUINO_IDE_PATH" ] || [ ! -f "$ARDUINO_IDE_PATH/arduino-cli" ]; the
         curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | BINDIR="$ARDUINO_IDE_PATH" sh
     fi
 fi
+
+# Configure arduino-cli sketchbook path so it can find the manually-installed
+# sqfmi:esp32 hardware at $ARDUINO_USR_PATH/hardware/sqfmi/esp32 without
+# needing a Board Manager package index entry.
+if [ -f "$ARDUINO_IDE_PATH/arduino-cli" ]; then
+    echo "Configuring arduino-cli sketchbook path to $ARDUINO_USR_PATH ..."
+    "$ARDUINO_IDE_PATH/arduino-cli" config init > /dev/null 2>&1 || true
+    "$ARDUINO_IDE_PATH/arduino-cli" config set directories.user "$ARDUINO_USR_PATH" > /dev/null 2>&1 || true
+fi
