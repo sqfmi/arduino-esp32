@@ -1,11 +1,11 @@
 #!/bin/bash
 
-export ARDUINO_ESP32_PATH="$ARDUINO_USR_PATH/hardware/espressif/esp32"
+export ARDUINO_ESP32_PATH="$ARDUINO_USR_PATH/hardware/sqfmi/esp32"
 if [ ! -d "$ARDUINO_ESP32_PATH" ]; then
     echo "Installing ESP32 Arduino Core ..."
     script_init_path="$PWD"
-    mkdir -p "$ARDUINO_USR_PATH/hardware/espressif"
-    cd "$ARDUINO_USR_PATH/hardware/espressif" || exit
+    mkdir -p "$ARDUINO_USR_PATH/hardware/sqfmi"
+    cd "$ARDUINO_USR_PATH/hardware/sqfmi" || exit
 
     echo "Installing Python Serial ..."
     pip install pyserial > /dev/null

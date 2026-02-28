@@ -54,7 +54,7 @@ jobs:
     env:
       REPOSITORY: |
         - source-path: '.'
-          name: "espressif:esp32"
+          name: "sqfmi:esp32"
 
     strategy:
       fail-fast: false
@@ -80,9 +80,9 @@ jobs:
           echo "Starting board validation for chunk..."
           failed_boards=()
           
-          # Extract board names from FQBNs (remove espressif:esp32: prefix)
+          # Extract board names from FQBNs (remove sqfmi:esp32: prefix)
           boards_json=$(cat fqbns.json)
-          board_names=$(echo "$boards_json" | jq -r '.[]' | sed 's/espressif:esp32://')
+          board_names=$(echo "$boards_json" | jq -r '.[]' | sed 's/sqfmi:esp32://')
           
           for board in $board_names; do
             echo "Validating board: $board"

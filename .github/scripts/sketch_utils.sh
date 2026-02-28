@@ -190,35 +190,35 @@ function build_sketch { # build_sketch <ide_path> <user_path> <path-to-ino> [ext
             case "$target" in
                 "esp32")
                     [ -n "${options:-$esp32_opts}" ] && opt=":${options:-$esp32_opts}"
-                    fqbn="espressif:esp32:esp32$opt"
+                    fqbn="sqfmi:esp32:esp32$opt"
                 ;;
                 "esp32s2")
                     [ -n "${options:-$esp32s2_opts}" ] && opt=":${options:-$esp32s2_opts}"
-                    fqbn="espressif:esp32:esp32s2$opt"
+                    fqbn="sqfmi:esp32:esp32s2$opt"
                 ;;
                 "esp32c3")
                     [ -n "${options:-$esp32c3_opts}" ] && opt=":${options:-$esp32c3_opts}"
-                    fqbn="espressif:esp32:esp32c3$opt"
+                    fqbn="sqfmi:esp32:esp32c3$opt"
                 ;;
                 "esp32s3")
                     [ -n "${options:-$esp32s3_opts}" ] && opt=":${options:-$esp32s3_opts}"
-                    fqbn="espressif:esp32:esp32s3$opt"
+                    fqbn="sqfmi:esp32:esp32s3$opt"
                 ;;
                 "esp32c6")
                     [ -n "${options:-$esp32c6_opts}" ] && opt=":${options:-$esp32c6_opts}"
-                    fqbn="espressif:esp32:esp32c6$opt"
+                    fqbn="sqfmi:esp32:esp32c6$opt"
                 ;;
                 "esp32h2")
                     [ -n "${options:-$esp32h2_opts}" ] && opt=":${options:-$esp32h2_opts}"
-                    fqbn="espressif:esp32:esp32h2$opt"
+                    fqbn="sqfmi:esp32:esp32h2$opt"
                 ;;
                 "esp32p4")
                     [ -n "${options:-$esp32p4_opts}" ] && opt=":${options:-$esp32p4_opts}"
-                    fqbn="espressif:esp32:esp32p4$opt"
+                    fqbn="sqfmi:esp32:esp32p4$opt"
                 ;;
                 "esp32c5")
                     [ -n "${options:-$esp32c5_opts}" ] && opt=":${options:-$esp32c5_opts}"
-                    fqbn="espressif:esp32:esp32c5$opt"
+                    fqbn="sqfmi:esp32:esp32c5$opt"
                 ;;
                 *)
                     echo "ERROR: Invalid chip: $target"
@@ -335,7 +335,7 @@ function build_sketch { # build_sketch <ide_path> <user_path> <path-to-ino> [ext
                 # Extract the directory path excluding the filename
                 directory_path=$(dirname "$sketch")
                 # Define the constant part
-                constant_part="/home/runner/Arduino/hardware/espressif/esp32/libraries/"
+                constant_part="/home/runner/Arduino/hardware/sqfmi/esp32/libraries/"
                 # Extract the desired substring
                 lib_sketch_name="${directory_path#"$constant_part"}"
                 #append json file where key is fqbn, sketch name, sizes -> extracted values
@@ -583,7 +583,7 @@ function build_sketches { # build_sketches <ide_path> <user_path> <target> <path
 
     #if fqbn is not passed then set it to default for compilation log
     if [ -z "$fqbn" ]; then
-        log_fqbn="espressif:esp32:$target"
+        log_fqbn="sqfmi:esp32:$target"
     else
         log_fqbn=$fqbn
     fi

@@ -47,9 +47,9 @@ while read -r line; do
     
     if [ "$is_excluded" = false ]; then
         if [ "$board_name" != "$previous_board" ]; then
-            boards_array+=("espressif:esp32:$board_name")
+            boards_array+=("sqfmi:esp32:$board_name")
             previous_board="$board_name"
-            echo "Added 'espressif:esp32:$board_name' to array"
+            echo "Added 'sqfmi:esp32:$board_name' to array"
         fi
     fi
 done <<< "$modified_lines"

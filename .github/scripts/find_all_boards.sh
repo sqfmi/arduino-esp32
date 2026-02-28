@@ -13,11 +13,11 @@ while read -r line; do
     board_name=$(echo "$line" | cut -d '.' -f1 | cut -d '#' -f1)
     # Skip SoCs that don't have pre-built libs
     if should_skip_lib_build "$board_name"; then
-        echo "Skipping 'espressif:esp32:$board_name'"
+        echo "Skipping 'sqfmi:esp32:$board_name'"
         continue
     fi
-    boards_array+=("espressif:esp32:$board_name")
-    echo "Added 'espressif:esp32:$board_name' to array"
+    boards_array+=("sqfmi:esp32:$board_name")
+    echo "Added 'sqfmi:esp32:$board_name' to array"
 done <<< "$boards_list"
 
 # Create JSON like string with all boards found and pass it to env variable

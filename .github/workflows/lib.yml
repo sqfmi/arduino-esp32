@@ -52,7 +52,7 @@ jobs:
             else
               echo ',' >> matrix.json
             fi
-            echo "{\"target\": \"$target\", \"fqbn\": \"espressif:esp32:$target\"}" >> matrix.json
+            echo "{\"target\": \"$target\", \"fqbn\": \"sqfmi:esp32:$target\"}" >> matrix.json
           done
           echo ']}' >> matrix.json
 
@@ -65,7 +65,7 @@ jobs:
     env:
       REPOSITORY: |
         - source-path: '.'
-          name: "espressif:esp32"
+          name: "sqfmi:esp32"
 
     strategy:
       matrix: ${{ fromJson(needs.gen-matrix.outputs.matrix) }}
