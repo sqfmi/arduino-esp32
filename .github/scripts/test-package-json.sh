@@ -7,8 +7,8 @@ set -e
 
 SCRIPTS_DIR="./.github/scripts"
 OUTPUT_DIR="$GITHUB_WORKSPACE/build"
-PACKAGE_JSON_DEV="package_esp32_dev_index.json"
-PACKAGE_JSON_REL="package_esp32_index.json"
+PACKAGE_JSON_DEV="package_sqfmi_dev_index.json"
+PACKAGE_JSON_REL="package_sqfmi_index.json"
 
 # Get release info
 RELEASE_PRE="${RELEASE_PRE:-false}"
@@ -55,21 +55,21 @@ echo "==========================================="
 echo "Installing esp32 core ..."
 package_json_url=$(get_file_url "$OUTPUT_DIR/$PACKAGE_JSON_DEV")
 echo "Package JSON URL: $package_json_url"
-arduino-cli core install esp32:esp32 --additional-urls "$package_json_url"
+arduino-cli core install sqfmi:esp32 --additional-urls "$package_json_url"
 if [ $? -ne 0 ]; then
     echo "ERROR: Failed to install esp32 ($?)"
     exit 1
 fi
 
 echo "Compiling example ..."
-arduino-cli compile --fqbn esp32:esp32:esp32s3 "$GITHUB_WORKSPACE"/libraries/ESP32/examples/CI/CIBoardsTest/CIBoardsTest.ino
+arduino-cli compile --fqbn sqfmi:esp32:esp32s3 "$GITHUB_WORKSPACE"/libraries/ESP32/examples/CI/CIBoardsTest/CIBoardsTest.ino
 if [ $? -ne 0 ]; then
     echo "ERROR: Failed to compile example ($?)"
     exit 1
 fi
 
 echo "Uninstalling esp32 core ..."
-arduino-cli core uninstall esp32:esp32
+arduino-cli core uninstall sqfmi:esp32
 if [ $? -ne 0 ]; then
     echo "ERROR: Failed to uninstall esp32 ($?)"
     exit 1
@@ -86,21 +86,21 @@ if [ "$RELEASE_PRE" == "false" ]; then
     echo "Installing esp32 core ..."
     package_json_url=$(get_file_url "$OUTPUT_DIR/$PACKAGE_JSON_REL")
     echo "Package JSON URL: $package_json_url"
-    arduino-cli core install esp32:esp32 --additional-urls "$package_json_url"
+    arduino-cli core install sqfmi:esp32 --additional-urls "$package_json_url"
     if [ $? -ne 0 ]; then
         echo "ERROR: Failed to install esp32 ($?)"
         exit 1
     fi
 
     echo "Compiling example ..."
-    arduino-cli compile --fqbn esp32:esp32:esp32s3 "$GITHUB_WORKSPACE"/libraries/ESP32/examples/CI/CIBoardsTest/CIBoardsTest.ino
+    arduino-cli compile --fqbn sqfmi:esp32:esp32s3 "$GITHUB_WORKSPACE"/libraries/ESP32/examples/CI/CIBoardsTest/CIBoardsTest.ino
     if [ $? -ne 0 ]; then
         echo "ERROR: Failed to compile example ($?)"
         exit 1
     fi
 
     echo "Uninstalling esp32 core ..."
-    arduino-cli core uninstall esp32:esp32
+    arduino-cli core uninstall sqfmi:esp32
     if [ $? -ne 0 ]; then
         echo "ERROR: Failed to uninstall esp32 ($?)"
         exit 1

@@ -11,8 +11,8 @@ SCRIPTS_DIR="./.github/scripts"
 source "$SCRIPTS_DIR/lib-github-release.sh"
 
 OUTPUT_DIR="$GITHUB_WORKSPACE/build"
-PACKAGE_JSON_DEV="package_esp32_dev_index.json"
-PACKAGE_JSON_REL="package_esp32_index.json"
+PACKAGE_JSON_DEV="package_sqfmi_dev_index.json"
+PACKAGE_JSON_REL="package_sqfmi_index.json"
 
 echo "Uploading package JSONs ..."
 

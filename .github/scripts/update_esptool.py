@@ -233,7 +233,7 @@ def main():
     args = parser.parse_args()
 
     script_dir = Path(__file__).resolve().parent
-    json_path = (script_dir / "../../package/package_esp32_index.template.json").resolve()
+    json_path = (script_dir / "../../package/package_sqfmi_index.template.json").resolve()
     tmp_json_path = Path(str(json_path) + ".tmp")
     shutil.copy(json_path, tmp_json_path)
 

@@ -720,7 +720,7 @@ def preprocess_changed_files(changed_files: list[str]) -> None:
     # Special case: if the Arduino libs or tools changes, rebuild all sketches on PRs
     if is_pr and not component_mode:
         for changed in changed_files:
-            if changed == "package/package_esp32_index.template.json":
+            if changed == "package/package_sqfmi_index.template.json":
                 print("Package index changed - all sketches affected", file=sys.stderr)
                 all_sketches = list_ino_files()
                 for sketch in all_sketches:
