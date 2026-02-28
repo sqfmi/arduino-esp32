@@ -3,7 +3,7 @@
 """Script to download and extract tools
 
 This script will download and extract required tools into the current directory.
-Tools list is obtained from package/package_esp32_index.template.json file.
+Tools list is obtained from package/package_sqfmi_index.template.json file.
 """
 
 from __future__ import print_function
@@ -515,7 +515,7 @@ if __name__ == "__main__":
     identified_platform = identify_platform()
     print("Platform: {0}".format(identified_platform))
     tools_to_download = load_tools_list(
-        current_dir + "/../package/package_esp32_index.template.json", identified_platform
+        current_dir + "/../package/package_sqfmi_index.template.json", identified_platform
     )
     mkdir_p(dist_dir)
 

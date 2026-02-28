@@ -23,50 +23,47 @@
           },
           "boards": [
             {
-              "name": "ESP32-S3 Dev Board"
-            },
-            {
               "name": "Watchy"
             }
           ],
           "toolsDependencies": [
             {
-              "packager": "esp32",
+              "packager": "sqfmi",
               "name": "esp32-arduino-libs",
               "version": "idf-release_v5.5-87912cd2-v1"
             },
             {
-              "packager": "esp32",
+              "packager": "sqfmi",
               "name": "xtensa-esp-elf-gcc",
               "version": "esp-14.2.0_20251107"
             },
             {
-              "packager": "esp32",
+              "packager": "sqfmi",
               "name": "xtensa-esp-elf-gdb",
               "version": "16.3_20250913"
             },
             {
-              "packager": "esp32",
+              "packager": "sqfmi",
               "name": "openocd-esp32",
               "version": "v0.12.0-esp32-20251215"
             },
             {
-              "packager": "esp32",
+              "packager": "sqfmi",
               "name": "esptool_py",
               "version": "5.2.0"
             },
             {
-              "packager": "esp32",
+              "packager": "sqfmi",
               "name": "mkspiffs",
               "version": "0.2.3"
             },
             {
-              "packager": "esp32",
+              "packager": "sqfmi",
               "name": "mklittlefs",
               "version": "4.0.2-db0513a"
             },
             {
-              "packager": "arduino",
+              "packager": "sqfmi",
               "name": "dfu-util",
               "version": "0.11.0-arduino5"
             }
