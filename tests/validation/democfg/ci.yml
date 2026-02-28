@@ -1,11 +1,11 @@
 fqbn:
   esp32:
-    - espressif:esp32:esp32:PSRAM=enabled,PartitionScheme=huge_app,FlashMode=dio
-    - espressif:esp32:esp32:PSRAM=enabled,PartitionScheme=huge_app,FlashMode=qio
+    - sqfmi:esp32:esp32:PSRAM=enabled,PartitionScheme=huge_app,FlashMode=dio
+    - sqfmi:esp32:esp32:PSRAM=enabled,PartitionScheme=huge_app,FlashMode=qio
   esp32s2:
-    - espressif:esp32:esp32s2:PSRAM=enabled,PartitionScheme=huge_app
+    - sqfmi:esp32:esp32s2:PSRAM=enabled,PartitionScheme=huge_app
   esp32s3:
-    - espressif:esp32:esp32s3:PSRAM=opi,USBMode=default,PartitionScheme=huge_app
+    - sqfmi:esp32:esp32s3:PSRAM=opi,USBMode=default,PartitionScheme=huge_app
 
 platforms:
   hardware: true

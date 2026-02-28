@@ -29,7 +29,7 @@ if [ ! -d "$ARDUINO_ESP32_PATH" ]; then
 
     echo "Installing Platform Tools ..."
     if [ "$OS_IS_WINDOWS" == "1" ]; then
-        cd tools && ./get.exe
+        cd tools && python get.py
     else
         cd tools && python get.py
     fi
