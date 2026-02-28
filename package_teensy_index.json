@@ -6,7 +6,7 @@
   "email": "paul@pjrc.com",
   "help": { "online": "https://forum.pjrc.com/forum.php" },
   "platforms": [ {
-    "name": "Teensy (for Arduino IDE 2.0.4 or later)",
+    "name": "TEST TEST",
     "architecture": "avr",
     "version": "1.56.2",
     "category": "Contributed",
