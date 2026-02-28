@@ -346,7 +346,7 @@ for soc_variant in "${CORE_VARIANTS[@]}"; do
     ')
 
     jq_args+=" | .packages[0].tools += [{\"name\": \"$tool_name\", \"version\": \"${RELEASE_TAG}\", \"systems\": $updated_systems}]"
-    jq_args+=" | .packages[0].platforms[0].toolsDependencies += [{\"packager\": \"esp32\", \"name\": \"$tool_name\", \"version\": \"${RELEASE_TAG}\"}]"
+    jq_args+=" | .packages[0].platforms[0].toolsDependencies += [{\"packager\": \"sqfmi\", \"name\": \"$tool_name\", \"version\": \"${RELEASE_TAG}\"}]"
 done
 
 cat "$PACKAGE_JSON_TEMPLATE" | jq "$jq_args" > "$OUTPUT_DIR/package-libs-updated.json"
