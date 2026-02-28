@@ -63,7 +63,7 @@
               "version": "4.0.2-db0513a"
             },
             {
-              "packager": "sqfmi",
+              "packager": "arduino",
               "name": "dfu-util",
               "version": "0.11.0-arduino5"
             }
