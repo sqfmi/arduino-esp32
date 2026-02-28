@@ -1,7 +1,7 @@
 {
 "packages": [ {
-  "name": "teensy",
-  "maintainer": "Paul Stoffregen",
+  "name": "test",
+  "maintainer": "test",
   "websiteURL": "https://www.pjrc.com/teensy/td_download.html",
   "email": "paul@pjrc.com",
   "help": { "online": "https://forum.pjrc.com/forum.php" },
